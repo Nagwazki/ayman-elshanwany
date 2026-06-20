@@ -17,30 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. القائمة المتنقلة ومنع التمرير (Hamburger Menu & Scroll Lock)
-    const hamburger = document.querySelector('.hamburger');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const body = document.body;
-
-    if (hamburger && mobileMenu) {
-        hamburger.addEventListener('click', () => {
-            const isOpen = hamburger.classList.toggle('open');
-            mobileMenu.classList.toggle('open');
-            
-            // منع التمرير في الخلفية عند فتح القائمة
-            body.style.overflow = isOpen ? 'hidden' : '';
-        });
-
-        // إغلاق القائمة عند الضغط على أي رابط
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('open');
-                mobileMenu.classList.remove('open');
-                body.style.overflow = '';
-            });
-        });
-    }
-
     // 3. تأثيرات الظهور باستخدام IntersectionObserver (Scroll Reveal)
     const revealOptions = {
         threshold: 0.15,
@@ -103,4 +79,97 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.style.transform = '';
         });
     });
+
+    // 6. Lightbox Gallery Logic
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('g-modal-img');
+    const closeBtn = document.querySelector('.g-close');
+    const prevBtn = document.getElementById('g-prev');
+    const nextBtn = document.getElementById('g-next');
+    const currentTxt = document.getElementById('g-current');
+    const totalTxt = document.getElementById('g-total');
+
+    let currentGallery = [];
+    let currentIndex = 0;
+
+    document.querySelectorAll('.p-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // إذا تم الضغط على الزر، نمنع المتصفح من الانتقال للرابط لفتح معرض الصور بدلاً من ذلك
+            if (e.target.closest('.p-card-link-btn')) {
+                e.preventDefault();
+            }
+
+            const galleryData = card.getAttribute('data-gallery');
+            if (galleryData) {
+                currentGallery = galleryData.split(',').map(s => s.trim());
+                currentIndex = 0;
+                openGallery();
+            }
+        });
+    });
+
+    function openGallery() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // منع السكرول
+        updateModalImage();
+    }
+
+    function updateModalImage() {
+        modalImg.src = currentGallery[currentIndex];
+        currentTxt.innerText = currentIndex + 1;
+        totalTxt.innerText = currentGallery.length;
+        
+        // إخفاء أزرار التنقل إذا كانت هناك صورة واحدة فقط
+        const nav = document.querySelector('.g-nav');
+        nav.style.display = currentGallery.length > 1 ? 'flex' : 'none';
+    }
+
+    nextBtn.onclick = () => {
+        currentIndex = (currentIndex + 1) % currentGallery.length;
+        updateModalImage();
+    };
+
+    prevBtn.onclick = () => {
+        currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+        updateModalImage();
+    };
+
+    closeBtn.onclick = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    // إضافة دعم لوحة المفاتيح للتنقل بين الصور
+    window.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('active')) return;
+        if (e.key === 'ArrowRight') nextBtn.click();
+        if (e.key === 'ArrowLeft') prevBtn.click();
+        if (e.key === 'Escape') closeBtn.click();
+    });
 });
+
+// وظيفة إرسال البيانات إلى واتساب
+function sendMsg(btn) {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
+    const service = document.getElementById('serviceSelect').value;
+    const message = document.getElementById('message').value;
+
+    // التحقق من ملء البيانات الأساسية
+    if (!firstName || !email || !message) {
+        alert("من فضلك أكمل البيانات المطلوبة (الاسم، الإيميل، والرسالة).");
+        return;
+    }
+
+    // --- غير الرقم هنا ---
+    // يجب أن يبدأ بكود الدولة (20 لمصر) ثم رقم الهاتف بدون أصفار في البداية أو علامة +
+    const myPhoneNumber = "201203341339"; 
+    
+    const text = `طلب جديد من الموقع:\nالاسم: ${firstName} ${lastName}\nالإيميل: ${email}\nالخدمة: ${service || 'لم يتم تحديدها'}\nالرسالة: ${message}`;
+    
+    // استخدام encodeURIComponent لتشفير النص ومنع أخطاء الرابط
+    const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(text)}`;
+    
+    window.open(whatsappUrl, '_blank');
+}
