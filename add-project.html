@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إضافة مشروع جديد | لوحة التحكم</title>
+  <!-- FontAwesome للأيقونات -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- خط Cairo الأنيق -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: #090a10;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 15px;
+    }
+
+    .form-container {
+      background: #12141e;
+      border: 1px solid #282754;
+      border-radius: 20px;
+      padding: 35px;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(26, 24, 71, 0.4);
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .form-header {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .form-header .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(26, 24, 71, 0.7);
+      color: #9d96ff;
+      border: 1px solid #3c378e;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .form-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .form-group label i {
+      color: #9d96ff;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: #090a12;
+      border: 1.5px solid #2a2850;
+      color: #fff;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #9d96ff;
+      box-shadow: 0 0 0 4px rgba(26, 24, 71, 0.7);
+      background: #0f111c;
+    }
+
+    .form-group .hint {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .cover-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-file-label {
+      background: #1a1847;
+      border: 1px solid #3c378e;
+      color: #fff;
+      padding: 13px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .btn-file-label:hover {
+      background: #2a2673;
+    }
+
+    .preview-box {
+      margin-top: 10px;
+      display: none;
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 200px;
+      border: 1px solid #3c378e;
+      position: relative;
+    }
+
+    .preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .btn-remove-thumb {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 22px;
+      height: 22px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #fff;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      line-height: 1;
+      transition: background 0.2s, transform 0.2s;
+      z-index: 5;
+    }
+
+    .btn-remove-thumb:hover {
+      background: #dc2626;
+      transform: scale(1.15);
+    }
+
+    .gallery-preview-box {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .gallery-thumb-wrap {
+      position: relative;
+      width: 65px;
+      height: 65px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid #3c378e;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .gallery-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn-submit {
+      flex: 2;
+      background: linear-gradient(135deg, #2b276b, #1a1847);
+      border: 1px solid #3c378e;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(26, 24, 71, 0.6);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(43, 39, 107, 0.8);
+      background: linear-gradient(135deg, #373289, #1a1847);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: transparent;
+      border: 1.5px solid #2a2850;
+      color: #94a3b8;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+      background: #1c1d2e;
+      color: #fff;
+    }
+
+    /* قائمة المشاريع الحالية */
+    .saved-list-container {
+      width: 100%;
+      max-width: 650px;
+      background: #12141e;
+      border: 1px solid #282754;
+      border-radius: 20px;
+      padding: 25px;
+    }
+
+    .saved-list-container h3 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #090a12;
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: 1px solid #242249;
+      margin-bottom: 10px;
+    }
+
+    .project-item img {
+      width: 55px;
+      height: 55px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .project-item-info {
+      flex: 1;
+    }
+
+    .project-item-info h4 {
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .project-item-info span {
+      font-size: 0.75rem;
+      color: #9d96ff;
+    }
+
+    .btn-delete {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: #dc2626;
+    }
+
+    .status-msg {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+    .status-msg.info {
+      display: block;
+      background: rgba(157, 150, 255, 0.15);
+      color: #9d96ff;
+      border: 1px solid #3c378e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="form-header">
+      <span class="badge"><i class="fa-solid fa-lock"></i> لوحة الإدارة</span>
+      <h1>إضافة مشروع جديد</h1>
+      <p>أدخلي بيانات المشروع لتظهر فوراً في قسم الأعمال على الموقع.</p>
+    </div>
+
+    <form id="add-project-form">
+      <!-- 1. اسم المشروع -->
+      <div class="form-group">
+        <label for="project-name">
+          <i class="fa-solid fa-heading"></i> اسم المشروع
+        </label>
+        <input type="text" id="project-name" placeholder="مثال: Markting up posters" required />
+      </div>
+
+      <!-- 2. صورة الغلاف الأساسية -->
+      <div class="form-group">
+        <label for="project-cover">
+          <i class="fa-solid fa-image"></i> صورة الغلاف الأساسية (Cover)
+        </label>
+        <div class="cover-input-row">
+          <input type="text" id="project-cover" placeholder="رابط مباشر أو اختاري من جهازك" required />
+          <label class="btn-file-label">
+            <i class="fa-solid fa-upload"></i> من جهازك
+            <input type="file" id="cover-file-input" accept="image/*" style="display: none;" />
+          </label>
+        </div>
+        <div id="cover-status" class="status-msg"></div>
+        <div class="preview-box" id="cover-preview-box">
+          <button type="button" id="btn-remove-cover" class="btn-remove-thumb" style="width: 26px; height: 26px; font-size: 15px; top: 8px; left: 8px;" title="إزالة صورة الغلاف">&times;</button>
+          <img id="cover-preview-img" src="" alt="معاينة الغلاف" />
+        </div>
+        <span class="hint">هذه هي الصورة التي تظهر في الكارت الرئيسي للمشروع.</span>
+      </div>
+
+      <!-- 3. صور الديزاينات الإضافية (معرض الصور) -->
+      <div class="form-group">
+        <label for="project-gallery">
+          <i class="fa-solid fa-images"></i> صور الديزاينات الإضافية (معرض الصور)
+        </label>
+        <div class="cover-input-row">
+          <input type="text" id="project-gallery" placeholder="روابط مفصولة بفاصلة ( , ) أو ارفعي من جهازك" />
+          <label class="btn-file-label" style="background: #252264;">
+            <i class="fa-solid fa-images"></i> من جهازك (متعدد)
+            <input type="file" id="gallery-file-input" accept="image/*" multiple style="display: none;" />
+          </label>
+        </div>
+        <div id="gallery-status" class="status-msg"></div>
+        <div class="gallery-preview-box" id="gallery-preview-box"></div>
+        <span class="hint">يمكنكِ اختيار عدة صور معاً من جهازك، والضغط على زر ( × ) الأحمر فوق أي صورة لإزالتها إذا رغبتِ!</span>
+      </div>
+
+      <!-- 4. نوع البرنامج أو التقنيات -->
+      <div class="form-group">
+        <label for="project-tag">
+          <i class="fa-solid fa-layer-group"></i> نوع البرنامج / التقنيات المستخدمة
+        </label>
+        <input type="text" id="project-tag" placeholder="مثال: photoshop | illustration" required />
+      </div>
+
+      <!-- أزرار الحفظ والإلغاء -->
+      <div class="form-actions">
+        <button type="submit" id="btn-submit" class="btn-submit">
+          <i class="fa-solid fa-check"></i> حفظ ونشر المشروع
+        </button>
+        <a href="index.html?admin=secret" class="btn-cancel">العودة للموقع</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- قائمة بالمشاريع المرفوعة حالياً -->
+  <div class="saved-list-container">
+    <h3>
+      <span><i class="fa-solid fa-list-check" style="color: #9d96ff;"></i> المشاريع المحفوظة حالياً</span>
+      <span id="saved-count" style="font-size: 0.85rem; color: #94a3b8;">(0 مشاريع)</span>
+    </h3>
+    <div id="saved-projects-list">
+      <!-- يتم عرض المشاريع المضافة هنا تلقائياً -->
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('add-project-form');
+    const submitBtn = document.getElementById('btn-submit');
+    const coverInput = document.getElementById('project-cover');
+    const fileInput = document.getElementById('cover-file-input');
+    const coverStatus = document.getElementById('cover-status');
+    const previewBox = document.getElementById('cover-preview-box');
+    const previewImg = document.getElementById('cover-preview-img');
+    const btnRemoveCover = document.getElementById('btn-remove-cover');
+
+    const galleryInput = document.getElementById('project-gallery');
+    const galleryFileInput = document.getElementById('gallery-file-input');
+    const galleryStatus = document.getElementById('gallery-status');
+    const galleryPreviewBox = document.getElementById('gallery-preview-box');
+
+    const savedList = document.getElementById('saved-projects-list');
+    const savedCount = document.getElementById('saved-count');
+
+    let uploadedGalleryImages = [];
+
+    // قراءة وضغط الصورة بذكاء
+    function readFileWithCompression(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (file.size < 800000) {
+            resolve(event.target.result);
+            return;
+          }
+
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 1200;
+            let w = img.width;
+            let h = img.height;
+            if (w > maxW) {
+              h = Math.round((h * maxW) / w);
+              w = maxW;
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = () => resolve(event.target.result);
+          img.src = event.target.result;
+        };
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // 1. عند اختيار صورة الغلاف من الجهاز
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        coverStatus.className = 'status-msg info';
+        coverStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري تجهيز الصورة...';
+        try {
+          const dataUrl = await readFileWithCompression(file);
+          coverInput.value = dataUrl;
+          previewImg.src = dataUrl;
+          previewBox.style.display = 'block';
+          coverStatus.style.display = 'none';
+        } catch (err) {
+          coverStatus.innerHTML = 'حدث خطأ أثناء قراءة الصورة';
+        }
+      }
+    });
+
+    coverInput.addEventListener('input', () => {
+      let val = coverInput.value.trim();
+      if (val) {
+        if (!val.startsWith('http') && !val.startsWith('data:') && !val.startsWith('photo/')) {
+          val = 'photo/' + val;
+        }
+        previewImg.src = val;
+        previewBox.style.display = 'block';
+      } else {
+        previewBox.style.display = 'none';
+      }
+    });
+
+    // إزالة صورة الغلاف عند الضغط على زر X
+    btnRemoveCover.addEventListener('click', () => {
+      coverInput.value = '';
+      fileInput.value = '';
+      previewImg.src = '';
+      previewBox.style.display = 'none';
+    });
+
+    // 2. إدارة وتحديث مصغرات صور المعرض مع إمكانية حذف أي منها
+    function renderGalleryPreviews() {
+      galleryPreviewBox.innerHTML = '';
+      
+      if (uploadedGalleryImages.length === 0) {
+        galleryInput.value = '';
+        return;
+      }
+
+      galleryInput.value = uploadedGalleryImages.join(', ');
+
+      uploadedGalleryImages.forEach((imgData, index) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'gallery-thumb-wrap';
+        wrap.innerHTML = `
+          <img src="${imgData}" class="gallery-thumb" alt="Gallery thumb" />
+          <button type="button" class="btn-remove-thumb" title="حذف هذه الصورة" onclick="removeGalleryImage(${index})">&times;</button>
+        `;
+        galleryPreviewBox.appendChild(wrap);
+      });
+    }
+
+    // دالة حذف صورة محددة من صور المعرض
+    window.removeGalleryImage = function(index) {
+      uploadedGalleryImages.splice(index, 1);
+      renderGalleryPreviews();
+    };
+
+    // عند اختيار صور المعرض الإضافية من الجهاز
+    galleryFileInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+
+      galleryStatus.className = 'status-msg info';
+      galleryStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري تجهيز (${files.length}) صور...`;
+
+      for (const file of files) {
+        try {
+          const dataUrl = await readFileWithCompression(file);
+          if (dataUrl) {
+            uploadedGalleryImages.push(dataUrl);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      galleryFileInput.value = ''; // تصفير الملف حتى يمكن اختياره مرة أخرى
+      galleryStatus.style.display = 'none';
+      renderGalleryPreviews();
+    });
+
+    // 3. عرض قائمة المشاريع المحفوظة حالياً
+    function renderSavedList() {
+      let projects = [];
+      try {
+        const raw = localStorage.getItem('axora_projects');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          projects = Array.isArray(parsed) ? parsed : [parsed];
+        }
+      } catch (err) {
+        projects = [];
+      }
+
+      savedCount.textContent = `(${projects.length} مشروع)`;
+
+      if (projects.length === 0) {
+        savedList.innerHTML = '<p style="color: #64748b; font-size: 0.9rem; text-align: center; padding: 15px;">لا توجد مشاريع مضافة بعد.</p>';
+        return;
+      }
+
+      savedList.innerHTML = projects.map((p, idx) => {
+        let thumb = p.cover || p.image || 'photo/1.jpg';
+        if (!thumb.startsWith('http') && !thumb.startsWith('data:') && !thumb.startsWith('photo/')) {
+          thumb = 'photo/' + thumb;
+        }
+        return `
+          <div class="project-item">
+            <img src="${thumb}" alt="${p.title}" onerror="this.src='photo/1.jpg'" />
+            <div class="project-item-info">
+              <h4>${p.title || 'مشروع بدون اسم'}</h4>
+              <span>${p.tag || 'design'}</span>
+            </div>
+            <button class="btn-delete" type="button" onclick="deleteProject(${idx})"><i class="fa-solid fa-trash"></i> حذف</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.deleteProject = function(index) {
+      if (confirm('هل أنتِ متأكدة من حذف هذا المشروع؟')) {
+        let projects = JSON.parse(localStorage.getItem('axora_projects')) || [];
+        projects.splice(index, 1);
+        localStorage.setItem('axora_projects', JSON.stringify(projects));
+        renderSavedList();
+      }
+    };
+
+    renderSavedList();
+
+    // 4. حفظ ونشر المشروع عند الضغط
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('project-name').value.trim();
+      let cover = coverInput.value.trim();
+      const extraGallery = galleryInput.value.trim();
+      const tag = document.getElementById('project-tag').value.trim();
+
+      if (!name) {
+        alert('يرجى كتابة اسم المشروع!');
+        document.getElementById('project-name').focus();
+        return;
+      }
+
+      if (!cover) {
+        alert('يرجى اختيار صورة الغلاف أو كتابة مسارها!');
+        coverInput.focus();
+        return;
+      }
+
+      if (!cover.startsWith('http') && !cover.startsWith('data:') && !cover.startsWith('photo/')) {
+        cover = 'photo/' + cover;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري النشر...';
+
+      // تجهيز مصفوفة المعرض
+      let galleryList = [cover];
+      if (uploadedGalleryImages.length > 0) {
+        galleryList.push(...uploadedGalleryImages);
+      } else if (extraGallery) {
+        extraGallery.split(',').map(s => s.trim()).filter(Boolean).forEach(s => {
+          if (!s.startsWith('http') && !s.startsWith('data:') && !s.startsWith('photo/')) {
+            s = 'photo/' + s;
+          }
+          galleryList.push(s);
+        });
+      }
+
+      const newProject = {
+        title: name,
+        cover: cover,
+        image: cover,
+        gallery: galleryList,
+        tag: tag || 'photoshop',
+        id: Date.now()
+      };
+
+      let projects = [];
+      try {
+        const raw = localStorage.getItem('axora_projects');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          projects = Array.isArray(parsed) ? parsed : [parsed];
+        }
+      } catch (err) {
+        projects = [];
+      }
+
+      projects.unshift(newProject);
+
+      try {
+        localStorage.setItem('axora_projects', JSON.stringify(projects));
+        alert('✅ تم حفظ ونشر المشروع بنجاح!');
+        window.location.href = 'index.html?admin=secret';
+      } catch (storageErr) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> حفظ ونشر المشروع';
+        alert('⚠️ حجم الصور كبير جداً على ذاكرة المتصفح! يرجى حذف بعض الصور غير المهمة أو تقليل عددها.');
+        console.error('LocalStorage save error:', storageErr);
+      }
+    });
+  </script>
+
+</body>
+</html>

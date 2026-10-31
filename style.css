@@ -1,7 +1,8 @@
 :root {
-  --r: #0099fff0; /* أزرق لامع ومضيء */
-  --r-glow: rgba(0, 153, 255, 0.4); /* توهج أزرق متناسق */
-  --r-soft: rgba(0, 153, 255, 0.08); /* نسخة ناعمة من الأزرق الجديد */
+  --r: #1a1847; /* أزرق لامع ومضيء */
+  --r-glow: rgba(55, 50, 140, 0.55); /* توهج أزرق متناسق */
+  --r-soft: rgba(26, 24, 71, 0.4);
+  --r-text: #968eff; /* نسخة ناعمة من الأزرق الجديد */
   --bg: #040400;
   --bg2: #080812;
   --card: rgba(255, 255, 255, 0.03);
@@ -25,8 +26,8 @@
   inset: 0;
   background-image: radial-gradient(
     circle at bottom,
-    #002a66 24%,
-    /* أزرق داكن متناسق مع الجديد */ #001533 43%,
+    #1a1847 28%,
+    #0c0b22 48%,
     /* أزرق داكن جداً متناسق */ #000000 80%
   );
   filter: blur(10px);
@@ -190,6 +191,8 @@ nav::after {
 .nav-center a.active {
   background: var(--r);
   color: #fff;
+  border: 1px solid #3c378e;
+  box-shadow: 0 4px 15px rgba(26, 24, 71, 0.6);
 }
 
 .nav-right {
@@ -236,7 +239,7 @@ nav::after {
   transform: scale(1.04);
   box-shadow:
     0 0 20px var(--r-glow),
-    0 0 40px rgba(0, 153, 255, 0.2);
+    0 0 40px rgba(55, 50, 140, 0.35);
 }
 .btn-nav:hover::before {
   left: 100%;
@@ -651,28 +654,28 @@ h2.display .italic {
 }
 
 .about-image-container {
-  width: clamp(200px, 30vw, 350px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
+  flex: 0 0 clamp(280px, 30vw, 380px);
+  max-width: 400px;
+  width: 100%;
+  aspect-ratio: 4 / 5;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle, var(--r-glow) 0%, transparent 70%);
-  box-shadow: 0 0 50px var(--r-glow);
-  flex-shrink: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }
 
 .about-main-image {
-  width: 90%;
-  height: 90%;
-  display: block; /* لضمان عدم وجود مسافات إضافية */
-  object-fit: cover; /* لضمان تغطية الصورة للمساحة دون تشويه */
-  border-radius: 50%;
-  border: 2px solid var(--r);
-  object-position: center 90%; /* لتحريك محتوى الصورة للأسفل أكثر */
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
 }
-
 .about-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -817,7 +820,7 @@ h2.display .italic {
   transition: all 0.3s;
 }
 .service-row:hover .tag-pill {
-  border-color: rgba(0, 153, 255, 0.3); /* تحديث rgba */
+  border-color: rgba(55, 50, 140, 0.45); /* تحديث rgba */
   color: var(--r);
 }
 
@@ -840,6 +843,7 @@ h2.display .italic {
   gap: 1rem;
 }
 .p-card {
+  grid-column: span 6;
   border-radius: 8px;
   overflow: hidden;
   position: relative;
@@ -1026,7 +1030,7 @@ h2.display .italic {
     transform 0.3s;
 }
 .testi-card:hover {
-  border-color: rgba(0, 153, 255, 0.2); /* تحديث rgba */
+  border-color: rgba(55, 50, 140, 0.35); /* تحديث rgba */
   transform: translateY(-4px);
 }
 .testi-card::before {
@@ -1131,14 +1135,14 @@ h2.display .italic {
   transition: all 0.3s ease;
 }
 .c-item:hover {
-  border-color: rgba(0, 153, 255, 0.2); /* تحديث rgba */
+  border-color: rgba(55, 50, 140, 0.35); /* تحديث rgba */
 }
 .c-icon {
   width: 40px;
   height: 40px;
   border-radius: 8px;
   background: var(--r-soft);
-  border: 1px solid rgba(0, 153, 255, 0.2); /* تحديث rgba */
+  border: 1px solid rgba(55, 50, 140, 0.35); /* تحديث rgba */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1246,8 +1250,8 @@ h2.display .italic {
   border-color: var(
     --r
   ); /* تلوين الإطار عند التركيز */ /* التأثيرات تستخدم المتغيرات الجديدة */
-  background: rgba(0, 153, 255, 0.03); /* تحديث rgba */
-  box-shadow: 0 0 0 4px rgba(0, 153, 255, 0.06); /* تحديث rgba */
+  background: rgba(26, 24, 71, 0.25); /* تحديث rgba */
+  box-shadow: 0 0 0 4px rgba(45, 41, 115, 0.35); /* تحديث rgba */
 }
 
 .fg fieldset {
@@ -1598,18 +1602,22 @@ footer .socials {
   }
   .nav-center a {
     flex-direction: column;
-    padding: 0.5rem 0.2rem;
-    font-size: 0.6rem;
+    padding: 0.45rem 0.2rem;
+    font-size: 0.65rem;
     gap: 4px;
     flex: 1;
-    background: transparent !important; /* إزالة خلفية الزر النشط في الجوال لشكل أنظف */
+    border-radius: 16px;
+    transition: all 0.3s ease;
   }
   .nav-center a i {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
   .nav-center a.active {
-    color: var(--r);
+    background: var(--r) !important;
+    color: #fff !important;
+    border: 1px solid #3c378e;
+    box-shadow: 0 4px 15px rgba(26, 24, 71, 0.8);
   }
   .hamburger,
   .nav-right .btn-nav {
@@ -1631,6 +1639,13 @@ footer .socials {
   }
   .about-top {
     flex-direction: column;
+    gap: 2rem;
+  }
+  .about-image-container {
+    margin: 1rem auto 0;
+    width: clamp(180px, 52vw, 230px);
+    max-width: 230px;
+    border-radius: 16px;
   }
   .portfolio-bento {
     grid-template-columns: 1fr;
@@ -1675,4 +1690,20 @@ footer .socials {
 .nagwa a:hover{
   opacity: .75;
   transform: translateY(-1px);
+}  
+
+.secret-add-btn {
+  display: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 15px 0;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  transition: transform 0.2s ease;
+}
+.secret-add-btn:hover {
+  transform: translateY(-2px);
 }
