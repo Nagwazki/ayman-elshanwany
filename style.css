@@ -1229,29 +1229,30 @@ h2.display .italic {
 .fg textarea,
 .fg select {
   background: rgba(255, 255, 255, 0.03);
-  border: none; /* إزالة الإطار من الحقل نفسه */
+  border: none;
   border-radius: 8px;
   color: var(--txt);
-  padding: 1.2rem 1.1rem 0.6rem 1.1rem; /* Adjust padding to make space for floating label */
+  padding: 1.2rem 1.1rem 0.6rem 1.1rem;
   font-family: "Archivo", sans-serif;
   font-size: 0.9rem;
   font-weight: 300;
   outline: none;
   transition: all 0.25s;
   resize: none;
+  appearance: none;
   -webkit-appearance: none;
+  -moz-appearance: none;
+  user-select: none;
+  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; /* منع التظليل بشكل عام */
 }
 .fg input:focus ~ fieldset,
 .fg textarea:focus ~ fieldset,
 .fg select:focus ~ fieldset {
-  border-color: var(
-    --r
-  ); /* تلوين الإطار عند التركيز */ /* التأثيرات تستخدم المتغيرات الجديدة */
-  background: rgba(26, 24, 71, 0.25); /* تحديث rgba */
-  box-shadow: 0 0 0 4px rgba(45, 41, 115, 0.35); /* تحديث rgba */
+  border-color: var(--r);
+  background: rgba(26, 24, 71, 0.25);
+  box-shadow: 0 0 0 4px rgba(45, 41, 115, 0.35);
 }
 
 .fg fieldset {
